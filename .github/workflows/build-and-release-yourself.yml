@@ -62,11 +62,6 @@ jobs:
           echo "SWIFTPROTOBUF_ROOTFUL=org.swift.protobuf.swiftprotobuf_${{ env.SWIFTPROTOBUF_VERSION }}_iphoneos-arm.deb" >> $GITHUB_ENV
           echo "SWIFTPROTOBUF_ROOTLESS=org.swift.protobuf.swiftprotobuf_${{ env.SWIFTPROTOBUF_VERSION }}_iphoneos-arm64.deb" >> $GITHUB_ENV
 
-      - name: Download OpenSpotifySafariExtension
-        run: |
-          git clone https://github.com/BillyCurtis/OpenSpotifySafariExtension
-          echo "OPENSPOTIFYSAFARIEXTENSION=OpenSpotifySafariExtension/OpenSpotifySafariExtension.appex" >> $GITHUB_ENV
-
       - name: Setup insert-dylib
         run: |
           git clone https://github.com/Tyilo/insert_dylib.git
@@ -91,8 +86,8 @@ jobs:
       - name: Create EeveeSpotify Package
         run: |
           ivinject-arm64 spotify.ipa EeveeSpotify.ipa \
-            -i eeveespotify.deb "$SWIFTPROTOBUF_ROOTFUL" "$OPENSPOTIFYSAFARIEXTENSION" \
-            -s - -d --level Optimal
+            -i eeveespotify.deb "$SWIFTPROTOBUF_ROOTFUL" \
+            -s -
 
       - name: Create Patched Package
         run: ipapatch -input EeveeSpotify.ipa -output EeveeSpotify-patched.ipa
