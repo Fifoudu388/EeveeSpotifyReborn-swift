@@ -17,6 +17,9 @@ on:
 env:
   SWIFTPROTOBUF_VERSION: "1.29.0"
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: macos-latest
