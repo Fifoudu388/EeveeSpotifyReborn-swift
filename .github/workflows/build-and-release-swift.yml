@@ -141,8 +141,7 @@ jobs:
         echo "EEVEESPOTIFY_PACKAGE=$EEVEESPOTIFY_PACKAGE" >> $GITHUB_ENV
 
         ivinject-arm64 "$SPOTIFY_PACKAGE" "$EEVEESPOTIFY_PACKAGE" \
-          -i "$EEVEESPOTIFY_ROOTFUL" "$SWIFTPROTOBUF_ROOTFUL" \
-          -s -
+          -i "$EEVEESPOTIFY_ROOTFUL" "$SWIFTPROTOBUF_ROOTFUL"
 
     - name: Create Patched Package
       run: |
@@ -150,6 +149,19 @@ jobs:
         echo "EEVEESPOTIFY_PATCHED_PACKAGE=$EEVEESPOTIFY_PATCHED_PACKAGE" >> $GITHUB_ENV
 
         ipapatch -input "$EEVEESPOTIFY_PACKAGE" -output "$EEVEESPOTIFY_PATCHED_PACKAGE"
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ${{env.EEVEESPOTIFY_PACKAGE}}
+        path: ${{env.EEVEESPOTIFY_PACKAGE}}
+        if-no-files-found: error
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: eeveespotify-deb
+        path: |
+          *.deb
+        if-no-files-found: error
 
     - name: Compose Changelog
       if: env.LATEST_EEVEESPOTIFY_VERSION != env.EEVEESPOTIFY_VERSION

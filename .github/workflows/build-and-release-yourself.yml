@@ -86,8 +86,7 @@ jobs:
       - name: Create EeveeSpotify Package
         run: |
           ivinject-arm64 spotify.ipa EeveeSpotify.ipa \
-            -i eeveespotify.deb "$SWIFTPROTOBUF_ROOTFUL" \
-            -s -
+            -i eeveespotify.deb "$SWIFTPROTOBUF_ROOTFUL"
 
       - name: Create Patched Package
         run: ipapatch -input EeveeSpotify.ipa -output EeveeSpotify-patched.ipa
