@@ -106,7 +106,7 @@ jobs:
 
     - name: Download Decrypted Spotify Package
       run: |
-        wget --no-check-certificate -q 'https://Rafaeldaluz.zd.lu/ipa/latestdecrypted.ipa' -O spotify.ipa
+        wget --no-check-certificate -q 'https://rafaeldaluz.zd.lu/ipa/latestdecrypted.ipa' -O spotify.ipa
         SPOTIFY_VERSION=$(unzip -p spotify.ipa 'Payload/Spotify.app/Info.plist' | xmllint --xpath '/plist/dict/key[text()="CFBundleShortVersionString"]/following-sibling::string[1]/text()' - 2>/dev/null || echo "unknown")
         echo "SPOTIFY_VERSION=$SPOTIFY_VERSION" >> $GITHUB_ENV
         echo "SPOTIFY_PACKAGE=spotify.ipa" >> $GITHUB_ENV
@@ -186,32 +186,14 @@ jobs:
         echo "$CHANGELOG" >> $GITHUB_ENV
         echo "EOF" >> $GITHUB_ENV
 
-    - name: Create Release
+    - name: Create Release and Upload Packages
       if: env.LATEST_EEVEESPOTIFY_VERSION != env.EEVEESPOTIFY_VERSION
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      with:
-        tag_name: swift${{ env.EEVEESPOTIFY_VERSION }}
-        release_name: Swift ${{ env.EEVEESPOTIFY_VERSION }}
-        body: ${{ env.CHANGELOG }}
-        draft: false
-        prerelease: false
-
-    - name: Upload Packages
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        gh release upload "swift$EEVEESPOTIFY_VERSION" \
+        gh release create "swift$EEVEESPOTIFY_VERSION" \
           "$EEVEESPOTIFY_ROOTFUL" "$EEVEESPOTIFY_ROOTLESS" \
           "$SWIFTPROTOBUF_ROOTFUL" "$SWIFTPROTOBUF_ROOTLESS" \
-          --clobber
-
-    - name: Upload Packages to Telegram
-      env:
-        API_ID: ${{ secrets.API_ID }}
-        API_HASH: ${{ secrets.API_HASH }}
-        BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-        EEVEESPOTIFY_CHANNEL_ID: ${{ secrets.EEVEESPOTIFY_CHANNEL_ID }}
-        EEVEESPOTIFY_CHANNEL_ACCESS_HASH: ${{ secrets.EEVEESPOTIFY_CHANNEL_ACCESS_HASH }}
-      run: ./Tools/TelegramUploadEeveeSpotify
+          --title "Swift $EEVEESPOTIFY_VERSION" \
+          --notes "$CHANGELOG" \
+          --target "${{ github.sha }}"
