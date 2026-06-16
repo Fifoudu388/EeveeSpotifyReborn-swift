@@ -99,6 +99,11 @@ jobs:
         echo "SWIFTPROTOBUF_ROOTFUL=org.swift.protobuf.swiftprotobuf_${{ env.SWIFTPROTOBUF_VERSION }}_iphoneos-arm.deb" >> $GITHUB_ENV
         echo "SWIFTPROTOBUF_ROOTLESS=org.swift.protobuf.swiftprotobuf_${{ env.SWIFTPROTOBUF_VERSION }}_iphoneos-arm64.deb" >> $GITHUB_ENV
 
+    - name: Download OpenSpotifySafariExtension
+      run: |
+        git clone https://github.com/BillyCurtis/OpenSpotifySafariExtension
+        echo "OPENSPOTIFYSAFARIEXTENSION=OpenSpotifySafariExtension/OpenSpotifySafariExtension.appex" >> $GITHUB_ENV
+
     - name: Download Decrypted Spotify Package
       run: |
         response=$(curl -ks 'https://decrypt.whoeevee.com/decrypted?appId=324684580&apiKey=${{ secrets.EEVEEDECRYPTER_API_KEY }}')
@@ -141,7 +146,8 @@ jobs:
         echo "EEVEESPOTIFY_PACKAGE=$EEVEESPOTIFY_PACKAGE" >> $GITHUB_ENV
 
         ivinject-arm64 "$SPOTIFY_PACKAGE" "$EEVEESPOTIFY_PACKAGE" \
-          -i "$EEVEESPOTIFY_ROOTFUL" "$SWIFTPROTOBUF_ROOTFUL"
+          -i "$EEVEESPOTIFY_ROOTFUL" "$SWIFTPROTOBUF_ROOTFUL" "$OPENSPOTIFYSAFARIEXTENSION" \
+          -s - -d --level Optimal
 
     - name: Create Patched Package
       run: |
@@ -149,19 +155,6 @@ jobs:
         echo "EEVEESPOTIFY_PATCHED_PACKAGE=$EEVEESPOTIFY_PATCHED_PACKAGE" >> $GITHUB_ENV
 
         ipapatch -input "$EEVEESPOTIFY_PACKAGE" -output "$EEVEESPOTIFY_PATCHED_PACKAGE"
-
-    - uses: actions/upload-artifact@v4
-      with:
-        name: ${{env.EEVEESPOTIFY_PACKAGE}}
-        path: ${{env.EEVEESPOTIFY_PACKAGE}}
-        if-no-files-found: error
-
-    - uses: actions/upload-artifact@v4
-      with:
-        name: eeveespotify-deb
-        path: |
-          *.deb
-        if-no-files-found: error
 
     - name: Compose Changelog
       if: env.LATEST_EEVEESPOTIFY_VERSION != env.EEVEESPOTIFY_VERSION
