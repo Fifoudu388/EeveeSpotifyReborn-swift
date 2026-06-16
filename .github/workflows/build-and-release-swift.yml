@@ -194,6 +194,7 @@ jobs:
         gh release create "swift$EEVEESPOTIFY_VERSION" \
           "$EEVEESPOTIFY_ROOTFUL" "$EEVEESPOTIFY_ROOTLESS" \
           "$SWIFTPROTOBUF_ROOTFUL" "$SWIFTPROTOBUF_ROOTLESS" \
+          "$EEVEESPOTIFY_PACKAGE" "$EEVEESPOTIFY_PATCHED_PACKAGE" \
           --title "Swift $EEVEESPOTIFY_VERSION" \
           --notes "$CHANGELOG" \
           --target "${{ github.sha }}"
