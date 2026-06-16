@@ -4,11 +4,13 @@ import Orion
 struct PopUpHelper {
     private static var isPopUpShowing = false
     
-    static let sharedPresenter = type(
-        of: Dynamic.SPTEncorePopUpPresenter
-        .alloc(interface: SPTEncorePopUpPresenter.self)
-    )
-    .shared()
+    static let sharedPresenter: SPTEncorePopUpPresenter? = {
+        let presenterType = type(
+            of: Dynamic.SPTEncorePopUpPresenter
+            .alloc(interface: SPTEncorePopUpPresenter.self)
+        )
+        return presenterType.shared()
+    }()
 
     static func showPopUp(
         delayed: Bool = false,
@@ -46,12 +48,12 @@ struct PopUpHelper {
 
                 }
 
-                sharedPresenter.dismissPopupWithAnimate(true, clearQueue: false, completion: nil)
+                sharedPresenter?.dismissPopupWithAnimate(true, clearQueue: false, completion: nil)
                 isPopUpShowing.toggle()
             })
 
             isPopUpShowing.toggle()
-            sharedPresenter.presentPopUp(dialog)
+            sharedPresenter?.presentPopUp(dialog)
         }
     }
 }

@@ -21,16 +21,18 @@ class URLSessionHelper {
     static var DarwinVersion: String {
         var sysinfo = utsname()
         uname(&sysinfo)
-        let dv = String(
+        guard let dv = String(
             bytes: Data(bytes: &sysinfo.release, count: Int(_SYS_NAMELEN)),
             encoding: .ascii
-        )!.trimmingCharacters(in: .controlCharacters)
-        return "Darwin/\(dv)"
+        ) else { return "Darwin/unknown" }
+        return "Darwin/\(dv.trimmingCharacters(in: .controlCharacters))"
     }
     
     static var CFNetworkVersion: String {
-        let dictionary = Bundle(identifier: "com.apple.CFNetwork")?.infoDictionary!
-        let version = dictionary?["CFBundleShortVersionString"] as! String
+        guard
+            let dictionary = Bundle(identifier: "com.apple.CFNetwork")?.infoDictionary,
+            let version = dictionary["CFBundleShortVersionString"] as? String
+        else { return "CFNetwork/unknown" }
         return "CFNetwork/\(version)"
     }
     

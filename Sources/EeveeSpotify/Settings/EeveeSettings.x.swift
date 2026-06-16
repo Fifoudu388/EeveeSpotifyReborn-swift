@@ -16,8 +16,10 @@ class SettingsListViewControllerHook: ClassHook<UIViewController> {
 
         let button = UIButton()
 
+        guard let githubImage = BundleHelper.shared.uiImage("github") else { return }
+
         button.setImage(
-            BundleHelper.shared.uiImage("github").withRenderingMode(.alwaysOriginal),
+            githubImage.withRenderingMode(.alwaysOriginal),
             for: .normal
         )
 
@@ -46,8 +48,10 @@ class SettingsListViewControllerHook: ClassHook<UIViewController> {
 
         let button = UIButton()
 
+        guard let githubImage = BundleHelper.shared.uiImage("github") else { return }
+
         button.setImage(
-            BundleHelper.shared.uiImage("github").withRenderingMode(.alwaysOriginal),
+            githubImage.withRenderingMode(.alwaysOriginal),
             for: .normal
         )
 

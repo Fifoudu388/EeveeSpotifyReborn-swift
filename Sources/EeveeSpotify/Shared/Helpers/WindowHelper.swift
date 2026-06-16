@@ -3,16 +3,16 @@ import UIKit
 struct WindowHelper {
     static let shared = WindowHelper()
     
-    let window: UIWindow
-    let rootViewController: UIViewController
+    let window: UIWindow?
+    let rootViewController: UIViewController?
     
     private init() { 
-        self.window = UIApplication.shared.windows.first!
-        self.rootViewController = window.rootViewController!
+        self.window = UIApplication.shared.windows.first
+        self.rootViewController = window?.rootViewController
     }
 
     func present(_ viewController: UIViewController) {
-        rootViewController.present(viewController, animated: true)
+        rootViewController?.present(viewController, animated: true)
     }
     
     func findFirstSubview(_ regex: String, in view: UIView) -> UIView? {
@@ -29,7 +29,7 @@ struct WindowHelper {
     }
 
     func findFirstViewController(_ regex: String) -> UIViewController? {
-        let rootView = self.rootViewController.view!
+        guard let rootView = self.rootViewController?.view else { return nil }
         var result: UIViewController?
         
         func searchViews(_ view: UIView) {
@@ -50,11 +50,11 @@ struct WindowHelper {
     }
     
     func dismissCurrentViewController() {
-        rootViewController.dismiss(animated: true)
+        rootViewController?.dismiss(animated: true)
     }
 
     func overrideUserInterfaceStyle(_ style: UIUserInterfaceStyle) {
-        window.overrideUserInterfaceStyle = style
+        window?.overrideUserInterfaceStyle = style
     }
 
     func viewController(for view: UIView) -> UIViewController? {

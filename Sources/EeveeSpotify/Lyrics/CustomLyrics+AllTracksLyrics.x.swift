@@ -24,7 +24,7 @@ class SPTPlayerTrackHook: ClassHook<NSObject> {
             return uri
         }
         
-        return NSURL(string: "spotify:track:")!
+        return NSURL(string: "spotify:track:") ?? uri
     }
 }
 

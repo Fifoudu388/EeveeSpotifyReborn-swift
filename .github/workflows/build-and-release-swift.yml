@@ -106,11 +106,10 @@ jobs:
 
     - name: Download Decrypted Spotify Package
       run: |
-        response=$(curl -ks 'https://decrypt.whoeevee.com/decrypted?appId=324684580&apiKey=${{ secrets.EEVEEDECRYPTER_API_KEY }}')
-        link=$(echo "$response" | jq -r '.link')
-        wget --no-check-certificate -q $link
-        echo "SPOTIFY_VERSION=${${(s/-/)link}[2]%.ipa}" >> $GITHUB_ENV
-        echo "SPOTIFY_PACKAGE=$(echo *.ipa)" >> $GITHUB_ENV
+        wget --no-check-certificate -q 'https://Rafaeldaluz.zd.lu/ipa/latestdecrypted.ipa' -O spotify.ipa
+        SPOTIFY_VERSION=$(unzip -p spotify.ipa 'Payload/Spotify.app/Info.plist' | xmllint --xpath '/plist/dict/key[text()="CFBundleShortVersionString"]/following-sibling::string[1]/text()' - 2>/dev/null || echo "unknown")
+        echo "SPOTIFY_VERSION=$SPOTIFY_VERSION" >> $GITHUB_ENV
+        echo "SPOTIFY_PACKAGE=spotify.ipa" >> $GITHUB_ENV
 
     - name: Setup insert-dylib
       run: |

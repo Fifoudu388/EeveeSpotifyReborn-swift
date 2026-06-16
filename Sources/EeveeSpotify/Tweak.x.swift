@@ -38,7 +38,9 @@ struct EeveeSpotify: Tweak {
     static let version = "6.2.2"
     
     static var hookTarget: VersionHookTarget {
-        let version = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
+        guard let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String else {
+            return .latest
+        }
         
         switch version {
         case "9.0.48":

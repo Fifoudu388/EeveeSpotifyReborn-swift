@@ -5,7 +5,9 @@ func modifyRemoteConfiguration(_ configuration: inout UcsResponse) {
     modifyAttributes(&configuration.attributes.accountAttributes)
     
     if UserDefaults.overwriteConfiguration {
-        configuration.resolve.configuration = try! BundleHelper.shared.resolveConfiguration()
+        if let resolvedConfig = try? BundleHelper.shared.resolveConfiguration() {
+            configuration.resolve.configuration = resolvedConfig
+        }
     }
     else {
         modifyAssignedValues(&configuration.assignedValues)
