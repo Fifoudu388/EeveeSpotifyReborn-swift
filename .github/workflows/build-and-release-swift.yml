@@ -205,4 +205,5 @@ jobs:
           "$EEVEESPOTIFY_PACKAGE" "$EEVEESPOTIFY_PATCHED_PACKAGE" \
           --title "Swift $EEVEESPOTIFY_VERSION" \
           --notes "$CHANGELOG" \
-          --target "${{ github.sha }}"
+          --target "${{ github.sha }}" \
+          --clobber
