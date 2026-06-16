@@ -186,8 +186,16 @@ jobs:
         echo "$CHANGELOG" >> $GITHUB_ENV
         echo "EOF" >> $GITHUB_ENV
 
+    - name: Upload IPAs as Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: EeveeSpotify-IPAs
+        path: |
+          ${{ env.EEVEESPOTIFY_PACKAGE }}
+          ${{ env.EEVEESPOTIFY_PATCHED_PACKAGE }}
+        if-no-files-found: error
+
     - name: Create Release and Upload Packages
-      if: env.LATEST_EEVEESPOTIFY_VERSION != env.EEVEESPOTIFY_VERSION
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
